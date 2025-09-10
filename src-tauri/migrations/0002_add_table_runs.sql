@@ -1,0 +1,13 @@
+-- 0002_add_table_runs.sql
+CREATE TABLE IF NOT EXISTS runs (
+    id TEXT PRIMARY KEY,
+    cost UNSIGNED INTEGER NOT NULL DEFAULT 0, -- 实际消耗体力
+    aid TEXT NOT NULL  -- 活动
+);
+
+CREATE TABLE IF NOT EXISTS run_drops (
+    id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    rid TEXT NOT NULL,
+    num UNSIGNED INTEGER NOT NULL DEFAULT 0
+);

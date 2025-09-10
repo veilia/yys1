@@ -1,0 +1,13 @@
+-- 0001_init.sql
+
+CREATE TABLE IF NOT EXISTS rec (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS act (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    cost UNSIGNED INTEGER NOT NULL DEFAULT 0, -- 通常体力消耗
+    tag TEXT NOT NULL DEFAULT '日常'
+);
