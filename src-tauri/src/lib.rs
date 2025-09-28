@@ -10,12 +10,14 @@ use crate::{
     db_act::{del_act, ins_act, sel_act, sel_all_act},
     db_rec::{del_rec, ins_rec, sel_rec},
     db_runs::ins_run,
+    db_stat::{sel_act_recs, sel_act_stats},
     structs::RunRec,
 };
 
 mod db_act;
 mod db_rec;
 mod db_runs;
+mod db_stat;
 mod db_usr;
 mod structs;
 
@@ -59,7 +61,9 @@ pub async fn run() -> Result<(), sqlx::Error> {
             add_rec,
             get_rec,
             rm_rec,
-            add_run
+            add_run,
+            get_act_stats,
+            get_act_recs,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -197,5 +201,25 @@ async fn add_run(
     match res {
         Ok(_) => Ok("Add run success".to_string()),
         Err(_) => Err(format!("Error add run")),
+    }
+}
+
+#[tauri::command(rename_all = "snake_case")]
+async fn get_act_stats(act: &str, pool: tauri::State<'_, Pool<Sqlite>>) -> Result<String, String> {
+    let res = sel_act_stats(act, &pool).await;
+
+    match res {
+        Ok(_) => Ok("Get act stats success".to_string()),
+        Err(_) => Err(format!("Error get act stats")),
+    }
+}
+
+#[tauri::command(rename_all = "snake_case")]
+async fn get_act_recs(act: &str, pool: tauri::State<'_, Pool<Sqlite>>) -> Result<String, String> {
+    let res = sel_act_recs(act, &pool).await;
+
+    match res {
+        Ok(_) => Ok("Get act recs success".to_string()),
+        Err(_) => Err(format!("Error get act recs")),
     }
 }

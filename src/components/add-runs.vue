@@ -26,15 +26,15 @@
 
                 <!-- 动态资源列表 -->
                 <el-form-item v-for="(item, index) in formLabelAlign.recs" :key="index" :label="index === 0 ? '资源' : ''"
-                    :label-position="itemLabelPosition" class="resource-item">
+                    :label-position="itemLabelPosition2" class="resource-item">
+                    <el-button v-if="formLabelAlign.recs.length > 1" link type="danger" size="small"
+                        @click="rm_recs(index)" style="margin-left: 8px">
+                        删除&nbsp;&nbsp;
+                    </el-button>
                     <el-select v-model="item.id" placeholder="请选择资源" style="width: 200px" size="small">
                         <el-option v-for="(r, idx) in rec" :key="idx" :label="r.name" :value="r.id" />
                     </el-select>
                     <el-input-number v-model="item.num" :min="0" size="small" style="width: 120px; margin-left: 8px" />
-                    <el-button v-if="formLabelAlign.recs.length > 1" link type="danger" size="small"
-                        @click="rm_recs(index)" style="margin-left: 8px">
-                        删除
-                    </el-button>
                 </el-form-item>
 
                 <!-- 添加资源按钮 -->
@@ -123,6 +123,7 @@ const reset = () => {
 
 const labelPosition = ref<FormProps['labelPosition']>('right')
 const itemLabelPosition = ref<FormItemProps['labelPosition']>('right')
+const itemLabelPosition2 = ref<FormItemProps['labelPosition']>('top')
 const formLabelAlign = ref<Form>({
     act: "",
     cost: 0,

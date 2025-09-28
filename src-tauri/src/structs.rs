@@ -20,3 +20,15 @@ pub struct Act {
     pub cost: Option<u32>,
     pub tag: Option<String>,
 }
+
+#[derive(Default, Serialize, Deserialize, FromRow)]
+pub struct ResAct {
+    pub cnt: Option<i64>,
+    pub t_cost: Option<i64>,
+}
+
+#[derive(Default, Serialize, Deserialize, FromRow)]
+pub struct ResRec {
+    pub id: Option<String>,
+    pub num: Option<i64>,
+}

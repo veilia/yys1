@@ -1,4 +1,4 @@
-use sqlx::{Pool, QueryBuilder, Sqlite, query, query_as};
+use sqlx::{Pool, QueryBuilder, Sqlite, query};
 use uuid::Uuid;
 
 use crate::structs::{Act, RunRec};
@@ -36,26 +36,6 @@ pub async fn ins_run(
         let query = query_builder.build();
         query.execute(pool).await?;
     }
-
-    Ok(())
-}
-
-pub async fn sel_runs(pool: &Pool<Sqlite>, act: Act) -> Result<Vec<Act>, sqlx::Error> {
-    let sql = r#"
-        select * from runs where aid = ?
-    "#;
-
-    let activities = query_as::<_, Act>(sql).bind(act.id).fetch_all(pool).await?;
-
-    Ok(activities)
-}
-
-pub async fn del_run(pool: &Pool<Sqlite>, id: String) -> Result<(), sqlx::Error> {
-    let sql = r#"
-        delete from act where id = ?
-    "#;
-
-    query(sql).bind(id).execute(pool).await?;
 
     Ok(())
 }
