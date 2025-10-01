@@ -41,6 +41,7 @@ import { ElMessage, FormInstance, FormRules, type FormItemProps, type FormProps 
 import { Act } from "../stores/type"
 import { ref } from "vue"
 
+
 const add_activity = async (formEl: FormInstance | undefined, data: Act) => {
     if (!formEl) return
     await formEl.validate((valid, fields) => {
@@ -48,11 +49,19 @@ const add_activity = async (formEl: FormInstance | undefined, data: Act) => {
             invoke("add_act", { act: data })
                 .then((res) => {
                     const msg = res as string
-                    ElMessage.success({ message: msg })
+                    ElMessage({
+                        message: msg, type: "success",
+                        showClose: true,
+                        placement: 'bottom-right',
+                    })
                 })
                 .catch((err) => {
                     const msg = err as string
-                    ElMessage.error({ message: msg })
+                    ElMessage({
+                        message: msg, type: "error",
+                        showClose: true,
+                        placement: 'bottom-right',
+                    })
                 })
         } else {
             console.log('error submit!', fields)

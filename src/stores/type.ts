@@ -9,3 +9,8 @@ export interface Rec {
     id: string
     name: string
 }
+
+export interface ResRec {
+    id: string
+    num: number
+}

@@ -2,7 +2,7 @@
     <el-container>
         <!-- <el-header>添加物品类型</el-header> -->
         <el-main>
-            <el-form ref="form_ref" :model="form_data" :rules="rules"  :label-position="labelPosition" label-width="auto"
+            <el-form ref="form_ref" :model="form_data" :rules="rules" :label-position="labelPosition" label-width="auto"
                 style="max-width: 600px">
                 <!-- <el-form-item label="排布" :label-position="itemLabelPosition">
                     <el-radio-group v-model="itemLabelPosition" aria-label="item label position">
@@ -28,7 +28,6 @@
 import { ref } from "vue"
 import { invoke } from "@tauri-apps/api/core"
 import { ElMessage, FormInstance, FormRules, type FormItemProps, type FormProps } from 'element-plus'
-
 
 const labelPosition = ref<FormProps['labelPosition']>('right')
 const itemLabelPosition = ref<FormItemProps['labelPosition']>('right')
@@ -57,11 +56,19 @@ const add_res_type = async (form_el: FormInstance | undefined, name: string) => 
             invoke("add_rec", { name: name })
                 .then((res) => {
                     const msg = res as string
-                    ElMessage.success({ message: msg })
+                    ElMessage({
+                        message: msg, type: "success",
+                        showClose: true,
+                        placement: 'bottom-right',
+                    })
                 })
                 .catch((err) => {
                     const msg = err as string
-                    ElMessage.error({ message: msg })
+                    ElMessage({
+                        message: msg, type: "error",
+                        showClose: true,
+                        placement: 'bottom-right',
+                    })
                 })
         } else {
             console.log('error submit!', fields)

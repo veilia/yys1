@@ -11,7 +11,7 @@ use crate::{
     db_rec::{del_rec, ins_rec, sel_rec},
     db_runs::ins_run,
     db_stat::{sel_act_recs, sel_act_stats},
-    structs::RunRec,
+    structs::{ResAct, ResRec, RunRec},
 };
 
 mod db_act;
@@ -205,21 +205,24 @@ async fn add_run(
 }
 
 #[tauri::command(rename_all = "snake_case")]
-async fn get_act_stats(act: &str, pool: tauri::State<'_, Pool<Sqlite>>) -> Result<String, String> {
+async fn get_act_stats(act: &str, pool: tauri::State<'_, Pool<Sqlite>>) -> Result<ResAct, String> {
     let res = sel_act_stats(act, &pool).await;
 
     match res {
-        Ok(_) => Ok("Get act stats success".to_string()),
+        Ok(r) => Ok(r),
         Err(_) => Err(format!("Error get act stats")),
     }
 }
 
 #[tauri::command(rename_all = "snake_case")]
-async fn get_act_recs(act: &str, pool: tauri::State<'_, Pool<Sqlite>>) -> Result<String, String> {
+async fn get_act_recs(
+    act: &str,
+    pool: tauri::State<'_, Pool<Sqlite>>,
+) -> Result<Vec<ResRec>, String> {
     let res = sel_act_recs(act, &pool).await;
 
     match res {
-        Ok(_) => Ok("Get act recs success".to_string()),
+        Ok(r) => Ok(r),
         Err(_) => Err(format!("Error get act recs")),
     }
 }

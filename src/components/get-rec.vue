@@ -22,16 +22,21 @@ import { invoke } from "@tauri-apps/api/core"
 import { ElMessage } from 'element-plus'
 import { type Act } from "../stores/type"
 
+
 const act = ref<Act[]>([])
 const get_act = () => {
     console.log("invoke -> get rec")
-    invoke("get_rec", {tag: '日常'})
+    invoke("get_rec", { tag: '日常' })
         .then((res) => {
             act.value = res as Act[]
         })
         .catch((err) => {
             const msg = err as string
-            ElMessage.error({ message: msg })
+            ElMessage({
+                message: msg, type: "error",
+                showClose: true,
+                placement: 'bottom-right',
+            })
             act.value = []
         })
 }
@@ -42,11 +47,19 @@ const rm_act = (id: string) => {
         .then((res) => {
             act.value = act.value.filter((item) => item.id !== id)
             const msg = res as string
-            ElMessage.success({ message: msg })
+            ElMessage({
+                message: msg, type: "success",
+                showClose: true,
+                placement: 'bottom-right',
+            })
         })
         .catch((err) => {
             const msg = err as string
-            ElMessage.error({ message: msg })
+            ElMessage({
+                message: msg, type: "error",
+                showClose: true,
+                placement: 'bottom-right',
+            })
         })
 }
 

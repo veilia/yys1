@@ -41,7 +41,11 @@ const get_act = () => {
         })
         .catch((err) => {
             const msg = err as string
-            ElMessage.error({ message: msg })
+            ElMessage({
+                message: msg, type: "error",
+                showClose: true,
+                placement: 'bottom-right',
+            })
             act.value = []
         })
 }
@@ -52,11 +56,19 @@ const rm_act = (id: string) => {
         .then((res) => {
             act.value = act.value.filter((item) => item.id !== id)
             const msg = res as string
-            ElMessage.success({ message: msg })
+            ElMessage({
+                message: msg, type: "success",
+                showClose: true,
+                placement: 'bottom-right',
+            })
         })
         .catch((err) => {
             const msg = err as string
-            ElMessage.error({ message: msg })
+            ElMessage({
+                message: msg, type: "error",
+                showClose: true,
+                placement: 'bottom-right',
+            })
         })
 }
 
@@ -68,7 +80,11 @@ const switch_mode = () => {
         })
         .catch((err) => {
             const msg = err as string
-            ElMessage.error({ message: msg })
+            ElMessage({
+                message: msg, type: "error",
+                showClose: true,
+                placement: 'bottom-right',
+            })
             act.value = []
         })
 }
