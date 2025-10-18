@@ -32,3 +32,9 @@ pub struct ResRec {
     pub id: Option<String>,
     pub num: Option<i64>,
 }
+
+#[derive(Default, Serialize, Deserialize, FromRow)]
+pub struct ResStat {
+    pub name: Option<String>,
+    pub num: Option<i64>,
+}

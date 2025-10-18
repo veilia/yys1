@@ -5,6 +5,11 @@ export interface Act {
     tag: string
 }
 
+export interface ResAct {
+    cnt: number
+    t_cost: number
+}
+
 export interface Rec {
     id: string
     name: string
@@ -12,5 +17,10 @@ export interface Rec {
 
 export interface ResRec {
     id: string
+    num: number
+}
+
+export interface ResStat {
+    name: string
     num: number
 }

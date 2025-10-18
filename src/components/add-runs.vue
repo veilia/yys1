@@ -2,6 +2,8 @@
     <el-container>
         <!-- <el-header>添加掉落物类型</el-header> -->
         <el-main v-if="formLabelAlign">
+            <app-stats ref="app_stats_ref" :act="formLabelAlign.act"></app-stats>
+
             <el-form :label-position="labelPosition" label-width="auto" :model="formLabelAlign"
                 style="max-width: 600px">
 
@@ -14,7 +16,6 @@
                     <el-input-number v-model="formLabelAlign.cost" :min="0" size="small"
                         style="width: 120px; margin-left: 8px" />
                 </el-form-item>
-
 
 
                 <!-- 动态资源列表 -->
@@ -56,11 +57,13 @@ import { invoke } from "@tauri-apps/api/core"
 import { ElMessage, type FormItemProps, type FormProps } from 'element-plus'
 import { Rec, ResRec, type Act } from "../stores/type"
 import { onMounted } from "vue"
+import AppStats from "./app-stats.vue"
 
 const act = ref<Act[]>([])
 const rec = ref<Rec[]>([])
+const app_stats_ref = ref<InstanceType<typeof AppStats> | null>(null)
 
-const actCostMap = ref<Record<string, number>>({})
+const act_cost_map = ref<Record<string, number>>({})
 
 const get_act_recs = (act: string) => {
     invoke("get_act_recs", { act: act })
@@ -88,10 +91,10 @@ const get_act = () => {
     invoke("get_all_act",)
         .then((res) => {
             act.value = res as Act[]
-            actCostMap.value = {}
+            act_cost_map.value = {}
             act.value.forEach(a => {
                 if (a.id && a.cost !== undefined) {
-                    actCostMap.value[a.id] = a.cost
+                    act_cost_map.value[a.id] = a.cost
                 }
             })
         })
@@ -104,9 +107,10 @@ const get_act = () => {
                 placement: 'bottom-right',
             })
             act.value = []
-            actCostMap.value = {}
+            act_cost_map.value = {}
         })
 }
+
 const get_rec = () => {
     invoke("get_rec")
         .then((res) => {
@@ -138,6 +142,8 @@ const add_runs = () => {
                 showClose: true,
                 placement: 'bottom-right',
             })
+            app_stats_ref.value?.get_act_stats(formLabelAlign.value.act)
+            app_stats_ref.value?.get_act_recs(formLabelAlign.value.act)
         })
         .catch((err) => {
             const msg = err as string
@@ -211,8 +217,8 @@ watch(
         // 仅当之前没有选择过，或切换了活动时才设置
         if (!oldActId || (newActId && newActId !== oldActId)) {
             get_act_recs(formLabelAlign.value.act)
-            if (newActId && actCostMap.value[newActId] !== undefined) {
-                formLabelAlign.value.cost = actCostMap.value[newActId]
+            if (newActId && act_cost_map.value[newActId] !== undefined) {
+                formLabelAlign.value.cost = act_cost_map.value[newActId]
             } else {
                 formLabelAlign.value.cost = 0
             }

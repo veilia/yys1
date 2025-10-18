@@ -10,8 +10,8 @@ use crate::{
     db_act::{del_act, ins_act, sel_act, sel_all_act},
     db_rec::{del_rec, ins_rec, sel_rec},
     db_runs::ins_run,
-    db_stat::{sel_act_recs, sel_act_stats},
-    structs::{ResAct, ResRec, RunRec},
+    db_stat::{sel_act_recs, sel_act_recs_2, sel_act_stats},
+    structs::{ResAct, ResRec, ResStat, RunRec},
 };
 
 mod db_act;
@@ -64,6 +64,7 @@ pub async fn run() -> Result<(), sqlx::Error> {
             add_run,
             get_act_stats,
             get_act_recs,
+            get_act_recs_2,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -220,6 +221,19 @@ async fn get_act_recs(
     pool: tauri::State<'_, Pool<Sqlite>>,
 ) -> Result<Vec<ResRec>, String> {
     let res = sel_act_recs(act, &pool).await;
+
+    match res {
+        Ok(r) => Ok(r),
+        Err(_) => Err(format!("Error get act recs")),
+    }
+}
+
+#[tauri::command(rename_all = "snake_case")]
+async fn get_act_recs_2(
+    act: &str,
+    pool: tauri::State<'_, Pool<Sqlite>>,
+) -> Result<Vec<ResStat>, String> {
+    let res = sel_act_recs_2(act, &pool).await;
 
     match res {
         Ok(r) => Ok(r),
